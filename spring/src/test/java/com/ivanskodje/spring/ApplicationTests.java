@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.ivanskodje.spring;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -8,7 +8,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
-public class ApplicationTests {
+public class  ApplicationTests {
 
   @Test
   public void contextLoads() {

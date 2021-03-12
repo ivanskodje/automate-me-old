@@ -1,17 +1,17 @@
-package com.example.demo.service.impl;
+package com.example.demo.temp.service.impl;
 
+import com.example.demo.temp.model.Item;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.example.demo.model.Item;
-import com.example.demo.service.ItemService;
+import com.example.demo.temp.service.ItemService;
 
 @Service("itemService")
 public class ItemServiceImpl implements ItemService {
 
-	private List<Item> items = new ArrayList<>(); 
+	private List<Item> items = new ArrayList<>();
 
 	public ItemServiceImpl() {
 		items.add(new Item(0, "Item 1"));

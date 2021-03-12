@@ -13,7 +13,7 @@
     </appender>
 
     <!-- LOG everything at INFO level -->
-    <root level="info">
+    <root level="DEBUG">
         <appender-ref ref="Console" />
     </root>
 
