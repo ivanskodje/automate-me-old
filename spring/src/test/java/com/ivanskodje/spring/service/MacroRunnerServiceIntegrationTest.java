@@ -1,7 +1,6 @@
 package com.ivanskodje.spring.service;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -12,6 +11,7 @@ import com.ivanskodje.spring.service.testhelp.TestKeyPressing;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -47,15 +47,14 @@ public class MacroRunnerServiceIntegrationTest extends TestKeyPressing {
     when(macroKeyListener.getMacroActionList()).thenReturn(macroActionList);
     macroRunnerService.setMacroKeyListener(macroKeyListener);
 
-
-
     List<MacroAction> scheduledMacroActionList = new ArrayList<>();
     doAnswer(invocation -> scheduledMacroActionList.add((MacroAction) invocation.getArguments()[1]))
-        .when(macroRunnerService).scheduleMacroAction(any(), any(), anyLong());
-
+        .when(macroRunnerService).scheduleMacroAction(any(), any());
 
     macroRunnerService.playRecording();
 
-    verify(macroRunnerService, times(8)).scheduleMacroAction(any(), any(), anyLong());
+    verify(macroRunnerService, times(8)).scheduleMacroAction(any(), any());
+
+    Assertions.assertThat(scheduledMacroActionList).containsAll(macroActionList);
   }
 }

@@ -1,24 +1,22 @@
 package com.ivanskodje.spring.service;
 
+import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
+import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 import com.ivanskodje.spring.service.macro.MacroAction;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
-import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
 
 @Slf4j
+@RequiredArgsConstructor
 public class MacroKeyListener implements NativeKeyListener {
 
   @Getter
   private final List<MacroAction> macroActionList = new ArrayList<>();
   private final List<Integer> pressedRawCodeList = new ArrayList<>();
-
-  @Override
-  public void nativeKeyTyped(NativeKeyEvent nativeKeyEvent) {
-    log.error("(Something got typed?): {}", nativeKeyEvent.paramString());
-  }
+  private final Long startTimeInMs;
 
   @Override
   public void nativeKeyPressed(NativeKeyEvent nativeKeyEvent) {
@@ -41,7 +39,8 @@ public class MacroKeyListener implements NativeKeyListener {
   }
 
   private void recordMacroAction(NativeKeyEvent nativeKeyEvent) {
-    MacroAction macroAction = new MacroAction(nativeKeyEvent);
+    Long delayInMs = System.currentTimeMillis() - startTimeInMs;
+    MacroAction macroAction = new MacroAction(nativeKeyEvent, delayInMs);
     macroActionList.add(macroAction);
   }
 

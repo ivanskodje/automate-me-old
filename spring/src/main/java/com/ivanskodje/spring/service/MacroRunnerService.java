@@ -23,15 +23,14 @@ public class MacroRunnerService {
   private Long startTimeInMs;
 
   public MacroRunnerService() throws NativeHookException {
-    this.macroKeyListener = new MacroKeyListener();
     GlobalScreen.registerNativeHook();
   }
 
 
   public void startRecording() {
-    this.macroKeyListener = new MacroKeyListener(); // TODO: remove later, we dont want to clean every time we start recording?
-    GlobalScreen.addNativeKeyListener(macroKeyListener);
     this.startTimeInMs = System.currentTimeMillis();
+    this.macroKeyListener = new MacroKeyListener(startTimeInMs);
+    GlobalScreen.addNativeKeyListener(macroKeyListener);
   }
 
   public void stopRecording() {
@@ -43,13 +42,12 @@ public class MacroRunnerService {
     ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
     for (MacroAction macroAction : macroActionList) {
-      long diffUntilMacroAction = macroAction.getTimeOfEventInMs() - startTimeInMs;
-      scheduleMacroAction(executorService, macroAction, diffUntilMacroAction);
+      scheduleMacroAction(executorService, macroAction);
     }
   }
 
-  void scheduleMacroAction(ScheduledExecutorService executorService, MacroAction macroAction,
-      long diffUntilMacroAction) {
-    executorService.schedule(new MacroActionRunner(macroAction), diffUntilMacroAction, TimeUnit.MILLISECONDS);
+  void scheduleMacroAction(ScheduledExecutorService executorService, MacroAction macroAction) {
+    executorService
+        .schedule(new MacroActionRunner(macroAction), macroAction.getDelayInMs(), TimeUnit.MILLISECONDS);
   }
 }

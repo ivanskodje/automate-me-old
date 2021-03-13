@@ -1,28 +1,19 @@
 package com.ivanskodje.spring.service.testhelp;
 
-import com.ivanskodje.spring.service.macro.ActionEvent;
+import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.ivanskodje.spring.service.macro.MacroAction;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
-import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
+import lombok.Setter;
 
 /**
  * Super class for tests
  */
 public class TestKeyPressing {
 
-  public MacroAction buildMacroActionKeyPress(int keyEvent) {
-    return new MacroAction(buildNativeKeyEvent(keyEvent, ActionEvent.KEY_PRESSED));
-  }
-
-  public NativeKeyEvent buildNativeKeyEvent(int keyEvent, ActionEvent actionEvent) {
-    return new NativeKeyEvent(actionEvent.getKeyCode(), 0, keyEvent, 0, ' ');
-  }
-
-  public MacroAction buildMacroActionKeyRelease(int keyEvent) {
-    return new MacroAction(buildNativeKeyEvent(keyEvent, ActionEvent.KEY_RELEASE));
-  }
+  @Setter
+  private Long delayInMs = 1L;
 
   public List<MacroAction> write(String text) {
     List<MacroAction> macroActionList = new ArrayList<>();
@@ -34,5 +25,20 @@ public class TestKeyPressing {
       macroActionList.add(macroActionReleased);
     }
     return macroActionList;
+  }
+
+  public MacroAction buildMacroActionKeyPress(int keyEvent) {
+    return new MacroAction(buildNativeKeyEvent(keyEvent, NativeKeyEvent.NATIVE_KEY_PRESSED),
+        delayInMs);
+  }
+
+  public NativeKeyEvent buildNativeKeyEvent(int keyEvent, int nativeKeyEventId) {
+    return new NativeKeyEvent(nativeKeyEventId, 0, keyEvent, 0, ' ');
+  }
+
+  public MacroAction buildMacroActionKeyRelease(int keyEvent) {
+
+    return new MacroAction(buildNativeKeyEvent(keyEvent, NativeKeyEvent.NATIVE_KEY_RELEASED),
+        delayInMs);
   }
 }

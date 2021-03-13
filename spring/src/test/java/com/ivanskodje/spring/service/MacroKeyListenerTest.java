@@ -2,12 +2,11 @@ package com.ivanskodje.spring.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.ivanskodje.spring.service.macro.ActionEvent;
+import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.ivanskodje.spring.service.macro.MacroAction;
 import com.ivanskodje.spring.service.testhelp.TestKeyPressing;
 import java.awt.event.KeyEvent;
 import java.util.List;
-import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,65 +25,67 @@ public class MacroKeyListenerTest extends TestKeyPressing {
 
   @Test
   public void testKeysPressedAreStored() {
-    macroKeyListener = new MacroKeyListener();
+    macroKeyListener = new MacroKeyListener(System.currentTimeMillis());
 
-    simulateKeyEvent(KeyEvent.VK_I, ActionEvent.KEY_PRESSED);
-    simulateKeyEvent(KeyEvent.VK_I, ActionEvent.KEY_RELEASE);
-    simulateKeyEvent(KeyEvent.VK_V, ActionEvent.KEY_PRESSED);
-    simulateKeyEvent(KeyEvent.VK_V, ActionEvent.KEY_RELEASE);
-    simulateKeyEvent(KeyEvent.VK_A, ActionEvent.KEY_PRESSED);
-    simulateKeyEvent(KeyEvent.VK_A, ActionEvent.KEY_RELEASE);
-    simulateKeyEvent(KeyEvent.VK_N, ActionEvent.KEY_PRESSED);
-    simulateKeyEvent(KeyEvent.VK_N, ActionEvent.KEY_RELEASE);
+    simulateKeyEvent(KeyEvent.VK_I, NativeKeyEvent.NATIVE_KEY_PRESSED);
+    simulateKeyEvent(KeyEvent.VK_I, NativeKeyEvent.NATIVE_KEY_RELEASED);
+    simulateKeyEvent(KeyEvent.VK_V, NativeKeyEvent.NATIVE_KEY_PRESSED);
+    simulateKeyEvent(KeyEvent.VK_V, NativeKeyEvent.NATIVE_KEY_RELEASED);
+    simulateKeyEvent(KeyEvent.VK_A, NativeKeyEvent.NATIVE_KEY_PRESSED);
+    simulateKeyEvent(KeyEvent.VK_A, NativeKeyEvent.NATIVE_KEY_RELEASED);
+    simulateKeyEvent(KeyEvent.VK_N, NativeKeyEvent.NATIVE_KEY_PRESSED);
+    simulateKeyEvent(KeyEvent.VK_N, NativeKeyEvent.NATIVE_KEY_RELEASED);
 
     List<MacroAction> macroActionList = macroKeyListener.getMacroActionList();
-
     assertThat(macroActionList)
-        .filteredOn(macroAction -> ActionEvent.KEY_PRESSED.equals(macroAction.getActionEvent()))
+        .filteredOn(
+            macroAction -> macroAction.getNativeKeyEvent().getID() == NativeKeyEvent.NATIVE_KEY_PRESSED)
         .hasSize(4)
         .extracting(MacroAction::getKeyName)
         .containsExactly("I", "V", "A", "N");
 
     assertThat(macroActionList)
-        .filteredOn(macroAction -> ActionEvent.KEY_RELEASE.equals(macroAction.getActionEvent()))
+        .filteredOn(
+            macroAction -> macroAction.getNativeKeyEvent().getID() == NativeKeyEvent.NATIVE_KEY_RELEASED)
         .hasSize(4)
         .extracting(MacroAction::getKeyName)
         .containsExactly("I", "V", "A", "N");
 
   }
 
-  private void simulateKeyEvent(int keyEvent, ActionEvent actionEvent) {
-    NativeKeyEvent nativeKeyEvent = buildNativeKeyEvent(keyEvent, actionEvent);
+  private void simulateKeyEvent(int keyEvent, int nativeKeyEventCode) {
+    NativeKeyEvent nativeKeyEvent = buildNativeKeyEvent(keyEvent, nativeKeyEventCode);
 
-    if (ActionEvent.KEY_PRESSED.equals(actionEvent)) {
+    if (NativeKeyEvent.NATIVE_KEY_PRESSED == nativeKeyEventCode) {
       macroKeyListener.nativeKeyPressed(nativeKeyEvent);
-    } else if (ActionEvent.KEY_RELEASE.equals(actionEvent)) {
+    } else if (NativeKeyEvent.NATIVE_KEY_RELEASED == nativeKeyEventCode) {
       macroKeyListener.nativeKeyReleased(nativeKeyEvent);
     }
   }
 
   @Test
   public void testKeysPressedAreNotStoredTwiceBeforeReleased() {
-    macroKeyListener = new MacroKeyListener();
+    macroKeyListener = new MacroKeyListener(System.currentTimeMillis());
 
-    simulateKeyEvent(KeyEvent.VK_I, ActionEvent.KEY_PRESSED);
-    simulateKeyEvent(KeyEvent.VK_I, ActionEvent.KEY_PRESSED);
-    simulateKeyEvent(KeyEvent.VK_I, ActionEvent.KEY_PRESSED);
-    simulateKeyEvent(KeyEvent.VK_I, ActionEvent.KEY_RELEASE);
+    simulateKeyEvent(KeyEvent.VK_I, NativeKeyEvent.NATIVE_KEY_PRESSED);
+    simulateKeyEvent(KeyEvent.VK_I, NativeKeyEvent.NATIVE_KEY_PRESSED);
+    simulateKeyEvent(KeyEvent.VK_I, NativeKeyEvent.NATIVE_KEY_PRESSED);
+    simulateKeyEvent(KeyEvent.VK_I, NativeKeyEvent.NATIVE_KEY_RELEASED);
 
     List<MacroAction> macroActionList = macroKeyListener.getMacroActionList();
 
     assertThat(macroActionList)
-        .filteredOn(macroAction -> ActionEvent.KEY_PRESSED.equals(macroAction.getActionEvent()))
+        .filteredOn(
+            macroAction -> macroAction.getNativeKeyEvent().getID() == NativeKeyEvent.NATIVE_KEY_PRESSED)
         .hasSize(1)
         .extracting(MacroAction::getKeyName)
         .containsExactly("I");
 
     assertThat(macroActionList)
-        .filteredOn(macroAction -> ActionEvent.KEY_RELEASE.equals(macroAction.getActionEvent()))
+        .filteredOn(
+            macroAction -> macroAction.getNativeKeyEvent().getID() == NativeKeyEvent.NATIVE_KEY_RELEASED)
         .hasSize(1)
         .extracting(MacroAction::getKeyName)
         .containsExactly("I");
-
   }
 }
