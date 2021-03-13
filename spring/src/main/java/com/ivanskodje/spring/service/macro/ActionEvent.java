@@ -1,4 +1,4 @@
-package com.ivanskodje.spring.service.stuff;
+package com.ivanskodje.spring.service.macro;
 
 import lombok.Getter;
 

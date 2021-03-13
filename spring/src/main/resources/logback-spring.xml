@@ -1,20 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
-    <property name="LOGS" value="./logs" />
+  <property name="LOGS" value="./logs"/>
 
-    <appender name="Console"
-              class="ch.qos.logback.core.ConsoleAppender">
-        <layout class="ch.qos.logback.classic.PatternLayout">
-            <Pattern>
-                %-5level [%thread] %logger{32} - %msg%n
-            </Pattern>
-        </layout>
-    </appender>
+  <appender name="Console"
+    class="ch.qos.logback.core.ConsoleAppender">
+    <layout class="ch.qos.logback.classic.PatternLayout">
+      <Pattern>
+        %-5level [%thread] %logger{32} - %msg%n
+      </Pattern>
+    </layout>
+  </appender>
 
-    <!-- LOG everything at INFO level -->
-    <root level="DEBUG">
-        <appender-ref ref="Console" />
-    </root>
+  <!-- LOG everything at INFO level -->
+  <root level="DEBUG">
+    <appender-ref ref="Console"/>
+  </root>
+    
+  <logger name="org.hibernate.validator" level="WARN"/>
+  <logger name="org.springframework.jdbc" level="INFO"/>
+  <logger name="org.springframework" level="WARN"/>
+  <logger name="org.springframework.web" level="WARN"/>
+  <logger name="org.springframework.security" level="WARN"/>
+  <logger name="org.springframework.cache" level="WARN"/>
 
 </configuration>

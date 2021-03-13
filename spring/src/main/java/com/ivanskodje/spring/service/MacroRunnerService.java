@@ -1,52 +1,55 @@
 package com.ivanskodje.spring.service;
 
-import com.ivanskodje.spring.service.stuff.MacroAction;
+import com.github.kwhat.jnativehook.GlobalScreen;
+import com.github.kwhat.jnativehook.NativeHookException;
+import com.ivanskodje.spring.service.macro.MacroAction;
+import com.ivanskodje.spring.service.macro.MacroActionRunner;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.jnativehook.GlobalScreen;
-import org.jnativehook.NativeHookException;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
 public class MacroRunnerService {
 
-  private final MacroKeyListener macroKeyListener;
+  @Setter
+  private MacroKeyListener macroKeyListener;
+
+  @Setter
+  private Long startTimeInMs;
 
   public MacroRunnerService() throws NativeHookException {
-    macroKeyListener = new MacroKeyListener();
+    this.macroKeyListener = new MacroKeyListener();
     GlobalScreen.registerNativeHook();
-
-    // TODO: Add a separate listener that starts/stops the service
   }
 
+
   public void startRecording() {
+    this.macroKeyListener = new MacroKeyListener(); // TODO: remove later, we dont want to clean every time we start recording?
     GlobalScreen.addNativeKeyListener(macroKeyListener);
-    GlobalScreen.
-
-    // w is 17
-
-    // start a listener
-
-    // wait until a key is pressed
-
+    this.startTimeInMs = System.currentTimeMillis();
   }
 
   public void stopRecording() {
-
     GlobalScreen.removeNativeKeyListener(macroKeyListener);
+  }
 
-    List<MacroAction> macroActionList = macroKeyListener.getMacroActions();
+  public void playRecording() {
+    List<MacroAction> macroActionList = macroKeyListener.getMacroActionList();
+    ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
-    for (MacroAction action : macroActionList) {
-      log.debug("KEY: {}, ACTION: {}, TIME: {}", action.getKeyName(), action.getActionEvent().name(),
-          action.getTimeOfEventInMs());
+    for (MacroAction macroAction : macroActionList) {
+      long diffUntilMacroAction = macroAction.getTimeOfEventInMs() - startTimeInMs;
+      scheduleMacroAction(executorService, macroAction, diffUntilMacroAction);
     }
+  }
 
-    macroActionList.clear(); // todo: temp for quick testing
-    // start a listener
-
-    // wait until a key is pressed
-
+  void scheduleMacroAction(ScheduledExecutorService executorService, MacroAction macroAction,
+      long diffUntilMacroAction) {
+    executorService.schedule(new MacroActionRunner(macroAction), diffUntilMacroAction, TimeUnit.MILLISECONDS);
   }
 }

@@ -19,11 +19,17 @@ public class MacroController {
     macroRunnerService.startRecording();
     return ResponseEntity.ok("Start");
   }
-  
+
   @GetMapping("/stop")
   public ResponseEntity<String> stop() {
     macroRunnerService.stopRecording();
     return ResponseEntity.ok("Stop");
+  }
+
+  @GetMapping("/play")
+  public ResponseEntity<String> play() {
+    macroRunnerService.playRecording();
+    return ResponseEntity.ok("Playing");
   }
 
 }
