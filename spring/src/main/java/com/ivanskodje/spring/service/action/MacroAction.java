@@ -1,4 +1,4 @@
-package com.ivanskodje.spring.service.macro;
+package com.ivanskodje.spring.service.action;
 
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import java.awt.event.KeyEvent;

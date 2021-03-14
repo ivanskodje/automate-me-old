@@ -2,8 +2,10 @@ package com.ivanskodje.spring.service;
 
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
-import com.ivanskodje.spring.service.macro.MacroAction;
-import com.ivanskodje.spring.service.macro.MacroActionRunner;
+import com.ivanskodje.spring.service.action.MacroAction;
+import com.ivanskodje.spring.service.runner.MacroActionRunner;
+import com.ivanskodje.spring.service.tool.MacroRecorder;
+import com.ivanskodje.spring.service.tool.listener.MacroKeyListener;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -16,29 +18,25 @@ import org.springframework.stereotype.Service;
 @Service
 public class MacroRunnerService {
 
+  private final MacroRecorder macroRecorder;
   @Setter
   private MacroKeyListener macroKeyListener;
 
-  @Setter
-  private Long startTimeInMs;
-
   public MacroRunnerService() throws NativeHookException {
     GlobalScreen.registerNativeHook();
+    macroRecorder = new MacroRecorder();
   }
 
-
   public void startRecording() {
-    this.startTimeInMs = System.currentTimeMillis();
-    this.macroKeyListener = new MacroKeyListener(startTimeInMs);
-    GlobalScreen.addNativeKeyListener(macroKeyListener);
+    macroRecorder.start();
   }
 
   public void stopRecording() {
-    GlobalScreen.removeNativeKeyListener(macroKeyListener);
+    macroRecorder.stop();
   }
 
   public void playRecording() {
-    List<MacroAction> macroActionList = macroKeyListener.getMacroActionList();
+    List<MacroAction> macroActionList = macroRecorder.getMacroActionList();
     ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
     for (MacroAction macroAction : macroActionList) {

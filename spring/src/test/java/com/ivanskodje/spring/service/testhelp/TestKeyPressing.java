@@ -1,7 +1,7 @@
 package com.ivanskodje.spring.service.testhelp;
 
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
-import com.ivanskodje.spring.service.macro.MacroAction;
+import com.ivanskodje.spring.service.action.MacroAction;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;

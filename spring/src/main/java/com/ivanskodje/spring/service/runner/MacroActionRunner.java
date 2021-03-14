@@ -1,6 +1,7 @@
-package com.ivanskodje.spring.service.macro;
+package com.ivanskodje.spring.service.runner;
 
 import com.github.kwhat.jnativehook.GlobalScreen;
+import com.ivanskodje.spring.service.action.MacroAction;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

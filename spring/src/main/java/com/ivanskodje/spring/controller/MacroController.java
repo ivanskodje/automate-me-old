@@ -1,5 +1,6 @@
 package com.ivanskodje.spring.controller;
 
+import com.ivanskodje.spring.aop.OnlyPressOnce;
 import com.ivanskodje.spring.service.MacroRunnerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,7 @@ public class MacroController {
     return ResponseEntity.ok("Stop");
   }
 
+  @OnlyPressOnce
   @GetMapping("/play")
   public ResponseEntity<String> play() {
     macroRunnerService.playRecording();
