@@ -2,6 +2,9 @@ package com.ivanskodje.spring.service;
 
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
+import com.github.kwhat.jnativehook.NativeInputEvent;
+import com.github.kwhat.jnativehook.mouse.NativeMouseEvent;
+import com.ivanskodje.spring.aop.aspect.OnlyPressOnce;
 import com.ivanskodje.spring.service.action.MacroAction;
 import com.ivanskodje.spring.service.runner.MacroActionRunner;
 import com.ivanskodje.spring.service.tool.MacroRecorder;

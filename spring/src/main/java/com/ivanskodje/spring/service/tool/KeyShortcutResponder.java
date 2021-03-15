@@ -1,8 +1,7 @@
 package com.ivanskodje.spring.service.tool;
 
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
-import com.ivanskodje.spring.aop.OnlyPressOnce;
-import java.awt.event.KeyEvent;
+import com.ivanskodje.spring.aop.aspect.OnlyPressOnce;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

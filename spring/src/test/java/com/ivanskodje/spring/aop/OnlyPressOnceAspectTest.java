@@ -4,6 +4,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
+import com.ivanskodje.spring.aop.aspect.OnlyPressOnceAspect;
 import com.ivanskodje.spring.service.testhelp.TestKeyPressing;
 import java.awt.event.KeyEvent;
 import java.util.List;
@@ -17,7 +18,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class OnlyPressOnceAspectTest extends TestKeyPressing {
 
-  OnlyPressOnceAspect onlyPressOnceAspect;
+  private OnlyPressOnceAspect onlyPressOnceAspect;
 
   @Before
   public void before() {
@@ -29,7 +30,7 @@ public class OnlyPressOnceAspectTest extends TestKeyPressing {
   public void testKeyPressedOnce_expectOneResult() throws Throwable {
     pressKey(KeyEvent.VK_I);
 
-    List<Integer> rawCodeList = onlyPressOnceAspect.getPressedRawCodeList();
+    List<Integer> rawCodeList = onlyPressOnceAspect.getNativeKeyPressedRawCodeList();
     Assertions.assertThat(rawCodeList.get(0)).isEqualTo(KeyEvent.VK_I);
     Assertions.assertThat(rawCodeList).hasSize(1);
   }
@@ -54,7 +55,7 @@ public class OnlyPressOnceAspectTest extends TestKeyPressing {
     pressKey(KeyEvent.VK_I);
     pressKey(KeyEvent.VK_A);
 
-    List<Integer> rawCodeList = onlyPressOnceAspect.getPressedRawCodeList();
+    List<Integer> rawCodeList = onlyPressOnceAspect.getNativeKeyPressedRawCodeList();
     Assertions.assertThat(rawCodeList.get(0)).isEqualTo(KeyEvent.VK_I);
     Assertions.assertThat(rawCodeList.get(1)).isEqualTo(KeyEvent.VK_A);
     Assertions.assertThat(rawCodeList).hasSize(2);

@@ -1,4 +1,4 @@
-package com.ivanskodje.spring.aop;
+package com.ivanskodje.spring.aop.aspect;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

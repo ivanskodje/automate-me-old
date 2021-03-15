@@ -2,7 +2,7 @@ package com.ivanskodje.spring.service.tool;
 
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
-import com.ivanskodje.spring.aop.OnlyPressOnce;
+import com.ivanskodje.spring.aop.aspect.OnlyPressOnce;
 import com.ivanskodje.spring.service.tool.listener.MacroKeyListener;
 import com.ivanskodje.spring.service.action.MacroAction;
 import java.util.ArrayList;
