@@ -7,3 +7,4 @@ logging:
   level:
     org.jnativehook: warn
     com.github.kwhat: warn
+    org.apache: warn

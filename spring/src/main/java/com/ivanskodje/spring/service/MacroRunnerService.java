@@ -2,18 +2,14 @@ package com.ivanskodje.spring.service;
 
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
-import com.github.kwhat.jnativehook.NativeInputEvent;
-import com.github.kwhat.jnativehook.mouse.NativeMouseEvent;
-import com.ivanskodje.spring.aop.aspect.OnlyPressOnce;
 import com.ivanskodje.spring.service.action.MacroAction;
 import com.ivanskodje.spring.service.runner.MacroActionRunner;
 import com.ivanskodje.spring.service.tool.MacroRecorder;
-import com.ivanskodje.spring.service.tool.listener.MacroKeyListener;
+import com.ivanskodje.spring.service.tool.MacroState;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -22,12 +18,15 @@ import org.springframework.stereotype.Service;
 public class MacroRunnerService {
 
   private final MacroRecorder macroRecorder;
-  @Setter
-  private MacroKeyListener macroKeyListener;
+
 
   public MacroRunnerService() throws NativeHookException {
     GlobalScreen.registerNativeHook();
     macroRecorder = new MacroRecorder();
+  }
+
+  public void toggleRecording() {
+    macroRecorder.toggle();
   }
 
   public void startRecording() {
@@ -39,12 +38,16 @@ public class MacroRunnerService {
   }
 
   public void playRecording() {
-    List<MacroAction> macroActionList = macroRecorder.getMacroActionList();
-    ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+    if (macroRecorder.getMacroState() == MacroState.STOPPED) {
+      log.debug("Playing last recording");
+      List<MacroAction> macroActionList = macroRecorder.getMacroActionList();
+      ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
-    for (MacroAction macroAction : macroActionList) {
-      scheduleMacroAction(executorService, macroAction);
+      for (MacroAction macroAction : macroActionList) {
+        scheduleMacroAction(executorService, macroAction);
+      }
     }
+    log.debug("We are in state {}", macroRecorder.getMacroState().name());
   }
 
   void scheduleMacroAction(ScheduledExecutorService executorService, MacroAction macroAction) {
