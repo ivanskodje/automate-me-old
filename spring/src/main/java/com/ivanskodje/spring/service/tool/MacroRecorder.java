@@ -5,6 +5,7 @@ import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.ivanskodje.spring.aop.aspect.OnlyPressOnce;
 import com.ivanskodje.spring.service.action.MacroAction;
 import com.ivanskodje.spring.service.tool.listener.MacroKeyListener;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
@@ -16,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class MacroRecorder {
 
+
   @Getter
   private final List<MacroAction> macroActionList = new ArrayList<>();
 
@@ -26,7 +28,9 @@ public class MacroRecorder {
 
   @OnlyPressOnce
   public void pressed(NativeKeyEvent nativeKeyEvent) {
-    recordKeyEvent(nativeKeyEvent);
+    if (!(nativeKeyEvent.getRawCode() == KeyEvent.VK_F9)) {
+      recordKeyEvent(nativeKeyEvent);
+    }
   }
 
   private void recordKeyEvent(NativeKeyEvent nativeKeyEvent) {
@@ -45,12 +49,14 @@ public class MacroRecorder {
       case STOPPED:
         log.debug("Starting to record");
         start();
+        break;
       case RECORDING:
         log.debug("Stopping recording");
         stop();
+        break;
       case PLAYING:
       default:
-        log.warn("Cannot start or stop while we already are recording");
+        log.warn("Cannot Start or Stop while we are Recording: Manually stop the recording first");
     }
   }
 

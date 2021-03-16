@@ -1,6 +1,8 @@
 package com.ivanskodje.spring.controller;
 
 import com.ivanskodje.spring.service.MacroRunnerService;
+import com.ivanskodje.spring.service.action.MacroAction;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -43,4 +45,12 @@ public class MacroController {
     macroRunnerService.playRecording();
     return ResponseEntity.ok("Playing");
   }
+
+  @GetMapping("/list")
+  public ResponseEntity<List<MacroAction>> list() {
+    log.debug("Running list()");
+    List<MacroAction> macroActionList = macroRunnerService.getMacroActionList();
+    return ResponseEntity.ok(macroActionList);
+  }
+
 }

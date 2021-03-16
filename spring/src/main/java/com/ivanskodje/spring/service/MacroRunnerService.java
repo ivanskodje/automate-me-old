@@ -37,7 +37,7 @@ public class MacroRunnerService {
     macroRecorder.stop();
   }
 
-  public void playRecording() {
+  public void playRecording() { // TODO: Look into separating the responsibility into a class. We are currently asking the macro recorder for multiple "things" and is doing the work ourselves, we DONT want that.
     if (macroRecorder.getMacroState() == MacroState.STOPPED) {
       log.debug("Playing last recording");
       List<MacroAction> macroActionList = macroRecorder.getMacroActionList();
@@ -53,5 +53,9 @@ public class MacroRunnerService {
   void scheduleMacroAction(ScheduledExecutorService executorService, MacroAction macroAction) {
     executorService
         .schedule(new MacroActionRunner(macroAction), macroAction.getDelayInMs(), TimeUnit.MILLISECONDS);
+  }
+
+  public List<MacroAction> getMacroActionList() {
+    return macroRecorder.getMacroActionList();
   }
 }
