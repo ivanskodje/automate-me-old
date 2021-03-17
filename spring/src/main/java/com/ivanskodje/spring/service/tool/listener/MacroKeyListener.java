@@ -12,11 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 public class MacroKeyListener implements NativeKeyListener {
 
   @Getter
-  private MacroRecorder macroRecorder;
+  private final MacroRecorder macroRecorder;
 
-  public MacroKeyListener(MacroRecorder macroRecorder) {
-    this.macroRecorder = macroRecorder;
-  }
 
   @Override
   public void nativeKeyPressed(NativeKeyEvent nativeKeyEvent) {

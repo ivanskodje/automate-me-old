@@ -20,11 +20,14 @@ public class MacroRecorder {
 
   @Getter
   private final List<MacroAction> macroActionList = new ArrayList<>();
-
+  private final MacroKeyListener macroKeyListener;
   @Setter
   private Long startTimeInMs;
-  private MacroKeyListener macroKeyListener;
   private MacroState macroState = MacroState.STOPPED;
+
+  public MacroRecorder() {
+    this.macroKeyListener = new MacroKeyListener(this);
+  }
 
   @OnlyPressOnce
   public void pressed(NativeKeyEvent nativeKeyEvent) {
@@ -61,15 +64,23 @@ public class MacroRecorder {
   }
 
   public void start() {
+    macroActionList.clear();
     this.startTimeInMs = System.currentTimeMillis();
-    this.macroKeyListener = new MacroKeyListener(this);
-    GlobalScreen.addNativeKeyListener(macroKeyListener);
     this.macroState = MacroState.RECORDING;
+    enableMacroKeyListener();
+  }
+
+  void enableMacroKeyListener() {
+    GlobalScreen.addNativeKeyListener(macroKeyListener);
   }
 
   public void stop() {
-    GlobalScreen.removeNativeKeyListener(macroKeyListener);
+    disableMacroKeyListener();
     this.macroState = MacroState.STOPPED;
+  }
+
+  void disableMacroKeyListener() {
+    GlobalScreen.removeNativeKeyListener(macroKeyListener);
   }
 
   public MacroState getMacroState() {
