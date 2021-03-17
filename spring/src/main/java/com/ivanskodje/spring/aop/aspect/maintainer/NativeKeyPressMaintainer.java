@@ -6,12 +6,14 @@ import java.util.List;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.springframework.stereotype.Component;
 
 @Slf4j
+@Component
 public class NativeKeyPressMaintainer {
 
   @Getter
-  private final List<Integer> pressedRawCodeList = new ArrayList<>();
+  private final List<Integer> pressedRawCodeList = new ArrayList<>(); // TODO: Consider if we can save NativeEvents directly
 
   public Object maintain(ProceedingJoinPoint joinPoint, NativeKeyEvent nativeKeyEvent) throws Throwable {
     int rawCode = nativeKeyEvent.getRawCode();

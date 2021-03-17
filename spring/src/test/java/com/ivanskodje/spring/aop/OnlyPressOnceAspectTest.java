@@ -5,6 +5,7 @@ import static org.mockito.Mockito.when;
 
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.ivanskodje.spring.aop.aspect.OnlyPressOnceAspect;
+import com.ivanskodje.spring.aop.aspect.maintainer.NativeKeyPressMaintainer;
 import com.ivanskodje.spring.service.testhelp.TestKeyPressing;
 import java.awt.event.KeyEvent;
 import java.util.List;
@@ -22,7 +23,7 @@ public class OnlyPressOnceAspectTest extends TestKeyPressing {
 
   @Before
   public void before() {
-    onlyPressOnceAspect = new OnlyPressOnceAspect();
+    onlyPressOnceAspect = new OnlyPressOnceAspect(new NativeKeyPressMaintainer());
   }
 
 

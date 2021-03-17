@@ -4,6 +4,7 @@ import com.github.kwhat.jnativehook.NativeInputEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.ivanskodje.spring.aop.aspect.maintainer.NativeKeyPressMaintainer;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -13,9 +14,10 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Aspect
 @Component
+@RequiredArgsConstructor
 public class OnlyPressOnceAspect {
 
-  private final NativeKeyPressMaintainer nativeKeyPressMaintainer = new NativeKeyPressMaintainer();
+  private final NativeKeyPressMaintainer nativeKeyPressMaintainer;
 
 
   @Around(value = "@annotation(onlyPressOnceAnnotation)")

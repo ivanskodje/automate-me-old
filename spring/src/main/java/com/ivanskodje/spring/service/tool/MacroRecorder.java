@@ -21,12 +21,12 @@ public class MacroRecorder {
 
   private final GlobalMacroState globalMacroState;
   private final MacroKeyListener macroKeyListener;
+  private MacroAction previousMacroAction = null;
   @Getter
   @Setter
   private List<MacroAction> macroActionList = new ArrayList<>();
   @Setter
   private Long startTimeInMs;
-
 
   public MacroRecorder(GlobalMacroState globalMacroState) {
     this.globalMacroState = globalMacroState;
@@ -39,9 +39,16 @@ public class MacroRecorder {
   }
 
   private void recordKeyEvent(NativeKeyEvent nativeKeyEvent) {
-    Long delayInMs = System.currentTimeMillis() - startTimeInMs;
-    MacroAction macroAction = new MacroAction(nativeKeyEvent, delayInMs);
+    Long delayInMs;
+    if (previousMacroAction == null) {
+      delayInMs = System.currentTimeMillis() - startTimeInMs;
+    } else {
+      delayInMs = System.currentTimeMillis() - previousMacroAction.getTime();
+    }
+    MacroAction macroAction = new MacroAction(nativeKeyEvent, delayInMs, System.currentTimeMillis());
     macroActionList.add(macroAction);
+
+    previousMacroAction = macroAction;
   }
 
   @OnlyPressOnce
@@ -78,6 +85,7 @@ public class MacroRecorder {
 
   public void stop() {
     disableMacroKeyListener();
+    previousMacroAction = null;
     globalMacroState.changeToStopped();
     removeShortcutsFromRecording();
   }

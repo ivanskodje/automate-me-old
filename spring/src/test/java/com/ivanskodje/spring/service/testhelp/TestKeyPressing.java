@@ -29,7 +29,7 @@ public class TestKeyPressing {
 
   public MacroAction buildMacroActionKeyPress(int keyEvent) {
     return new MacroAction(buildNativeKeyEvent(keyEvent, NativeKeyEvent.NATIVE_KEY_PRESSED),
-        delayInMs);
+        delayInMs, System.currentTimeMillis());
   }
 
   public NativeKeyEvent buildNativeKeyEvent(int keyEvent, int nativeKeyEventId) {
@@ -39,6 +39,6 @@ public class TestKeyPressing {
   public MacroAction buildMacroActionKeyRelease(int keyEvent) {
 
     return new MacroAction(buildNativeKeyEvent(keyEvent, NativeKeyEvent.NATIVE_KEY_RELEASED),
-        delayInMs);
+        delayInMs, System.currentTimeMillis());
   }
 }

@@ -8,11 +8,13 @@ import lombok.Getter;
 public class MacroAction {
 
   private final Long delayInMs;
+  private final Long time;
   private final NativeKeyEvent nativeKeyEvent;
 
-  public MacroAction(NativeKeyEvent nativeKeyEvent, Long delay) {
+  public MacroAction(NativeKeyEvent nativeKeyEvent, Long delay, Long startTime) {
     this.delayInMs = delay;
     this.nativeKeyEvent = nativeKeyEvent;
+    this.time = startTime;
   }
 
   @Override
@@ -27,4 +29,5 @@ public class MacroAction {
   public Integer getRawCode() {
     return nativeKeyEvent.getRawCode();
   }
+
 }
