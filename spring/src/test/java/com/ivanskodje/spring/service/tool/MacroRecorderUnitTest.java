@@ -1,36 +1,38 @@
 package com.ivanskodje.spring.service.tool;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.ivanskodje.spring.service.action.MacroAction;
 import com.ivanskodje.spring.service.testhelp.TestKeyPressing;
-import com.ivanskodje.spring.service.tool.listener.MacroKeyListener;
 import java.awt.event.KeyEvent;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
 
 @RunWith(MockitoJUnitRunner.class)
 public class MacroRecorderUnitTest extends TestKeyPressing {
 
-  private MacroKeyListener macroKeyListener;
+  private MacroRecorder spyMacroRecorder;
+  private GlobalMacroState globalMacroState;
 
   @Before
   public void before() {
-
+    this.globalMacroState = new GlobalMacroState();
+    this.spyMacroRecorder = spy(new MacroRecorder(globalMacroState));
   }
 
   @Test
   public void testKeyPressing() {
-    MacroRecorder macroRecorder = new MacroRecorder();
+    MacroRecorder macroRecorder = new MacroRecorder(new GlobalMacroState());
     macroRecorder.setStartTimeInMs(System.currentTimeMillis());
 
     macroRecorder.pressed(buildNativeKeyEvent(KeyEvent.VK_I, NativeKeyEvent.NATIVE_KEY_PRESSED));
@@ -61,26 +63,55 @@ public class MacroRecorderUnitTest extends TestKeyPressing {
 
   @Test
   public void testToggle_expectRecordingState() {
-    MacroRecorder macroRecorder = Mockito.spy(MacroRecorder.class);
+    doNothing().when(spyMacroRecorder).enableMacroKeyListener();
 
-    doNothing().when(macroRecorder).enableMacroKeyListener();
+    spyMacroRecorder.toggle();
 
-    macroRecorder.toggle();
-
-    assertThat(macroRecorder.getMacroState()).isEqualTo(MacroState.RECORDING);
+    assertTrue(globalMacroState.isRecording());
   }
 
   @Test
   public void testToggle_expectStoppedState() {
-    MacroRecorder macroRecorder = Mockito.spy(MacroRecorder.class);
+    doNothing().when(spyMacroRecorder).enableMacroKeyListener();
+    doNothing().when(spyMacroRecorder).disableMacroKeyListener();
 
-    doNothing().when(macroRecorder).enableMacroKeyListener();
-    doNothing().when(macroRecorder).disableMacroKeyListener();
+    spyMacroRecorder.toggle();
+    spyMacroRecorder.toggle();
 
-    macroRecorder.toggle();
-    macroRecorder.toggle();
+    assertTrue(globalMacroState.isStopped());
+    verify(spyMacroRecorder, times(1)).enableMacroKeyListener();
+  }
 
-    assertThat(macroRecorder.getMacroState()).isEqualTo(MacroState.STOPPED);
-    verify(macroRecorder, times(1)).enableMacroKeyListener();
+  @Test
+  public void testMacroActionPurificationAfterStoppingTheRecording_expectNoShortcutInList() {
+    spyMacroRecorder.setStartTimeInMs(System.currentTimeMillis());
+
+    NativeKeyEvent nativeKeyEventF9Release = buildNativeKeyEvent(KeyEvent.VK_F9,
+        NativeKeyEvent.NATIVE_KEY_RELEASED);
+    spyMacroRecorder.pressed(nativeKeyEventF9Release);
+    spyMacroRecorder.pressed(buildNativeKeyEvent(KeyEvent.VK_I, NativeKeyEvent.NATIVE_KEY_PRESSED));
+    spyMacroRecorder.released(buildNativeKeyEvent(KeyEvent.VK_I, NativeKeyEvent.NATIVE_KEY_RELEASED));
+    spyMacroRecorder.pressed(buildNativeKeyEvent(KeyEvent.VK_V, NativeKeyEvent.NATIVE_KEY_PRESSED));
+    spyMacroRecorder.released(buildNativeKeyEvent(KeyEvent.VK_V, NativeKeyEvent.NATIVE_KEY_RELEASED));
+    spyMacroRecorder.pressed(buildNativeKeyEvent(KeyEvent.VK_A, NativeKeyEvent.NATIVE_KEY_PRESSED));
+    spyMacroRecorder.released(buildNativeKeyEvent(KeyEvent.VK_A, NativeKeyEvent.NATIVE_KEY_RELEASED));
+    spyMacroRecorder.pressed(buildNativeKeyEvent(KeyEvent.VK_F10, NativeKeyEvent.NATIVE_KEY_PRESSED));
+    spyMacroRecorder.pressed(buildNativeKeyEvent(KeyEvent.VK_F10, NativeKeyEvent.NATIVE_KEY_RELEASED));
+    spyMacroRecorder.pressed(buildNativeKeyEvent(KeyEvent.VK_N, NativeKeyEvent.NATIVE_KEY_PRESSED));
+    spyMacroRecorder.released(buildNativeKeyEvent(KeyEvent.VK_N, NativeKeyEvent.NATIVE_KEY_RELEASED));
+    spyMacroRecorder.pressed(buildNativeKeyEvent(KeyEvent.VK_F9, NativeKeyEvent.NATIVE_KEY_PRESSED));
+
+    doNothing().when(spyMacroRecorder).disableMacroKeyListener();
+
+    List<MacroAction> macroActionList = spyMacroRecorder.getMacroActionList();
+    assertThat(macroActionList.get(0).getRawCode()).isEqualTo(KeyEvent.VK_F9);
+    assertThat(macroActionList.get(7).getRawCode()).isEqualTo(KeyEvent.VK_F10);
+    assertThat(macroActionList.get(8).getRawCode()).isEqualTo(KeyEvent.VK_F10);
+    assertThat(macroActionList.get(11).getRawCode()).isEqualTo(KeyEvent.VK_F9);
+
+    spyMacroRecorder.stop();
+
+    assertThat(macroActionList).extracting(MacroAction::getRawCode).doesNotContain(KeyEvent.VK_F9)
+        .doesNotContain(KeyEvent.VK_F10);
   }
 }

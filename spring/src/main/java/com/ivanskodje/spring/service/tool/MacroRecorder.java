@@ -8,32 +8,34 @@ import com.ivanskodje.spring.service.tool.listener.MacroKeyListener;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 @Slf4j
-@RequiredArgsConstructor
+@Component
 public class MacroRecorder {
 
-
-  @Getter
-  private final List<MacroAction> macroActionList = new ArrayList<>();
+  private final GlobalMacroState globalMacroState;
   private final MacroKeyListener macroKeyListener;
+  @Getter
+  @Setter
+  private List<MacroAction> macroActionList = new ArrayList<>();
   @Setter
   private Long startTimeInMs;
-  private MacroState macroState = MacroState.STOPPED;
 
-  public MacroRecorder() {
+
+  public MacroRecorder(GlobalMacroState globalMacroState) {
+    this.globalMacroState = globalMacroState;
     this.macroKeyListener = new MacroKeyListener(this);
   }
 
   @OnlyPressOnce
   public void pressed(NativeKeyEvent nativeKeyEvent) {
-    if (!(nativeKeyEvent.getRawCode() == KeyEvent.VK_F9)) {
-      recordKeyEvent(nativeKeyEvent);
-    }
+    recordKeyEvent(nativeKeyEvent);
   }
 
   private void recordKeyEvent(NativeKeyEvent nativeKeyEvent) {
@@ -48,7 +50,7 @@ public class MacroRecorder {
   }
 
   public void toggle() {
-    switch (macroState) {
+    switch (globalMacroState.getMacroState()) {
       case STOPPED:
         log.debug("Starting to record");
         start();
@@ -66,7 +68,7 @@ public class MacroRecorder {
   public void start() {
     macroActionList.clear();
     this.startTimeInMs = System.currentTimeMillis();
-    this.macroState = MacroState.RECORDING;
+    globalMacroState.changeToRecording();
     enableMacroKeyListener();
   }
 
@@ -76,14 +78,23 @@ public class MacroRecorder {
 
   public void stop() {
     disableMacroKeyListener();
-    this.macroState = MacroState.STOPPED;
+    globalMacroState.changeToStopped();
+    removeShortcutsFromRecording();
+  }
+
+  private void removeShortcutsFromRecording() {
+    List<MacroAction> macroActionsToDelete = macroActionList.stream()
+        .filter(doesContainsAnyShortcuts())
+        .collect(Collectors.toList());
+    macroActionList.removeAll(macroActionsToDelete);
+  }
+
+  private Predicate<MacroAction> doesContainsAnyShortcuts() {
+    return macroAction -> (macroAction.getRawCode() == KeyEvent.VK_F9
+        || macroAction.getRawCode() == KeyEvent.VK_F10);
   }
 
   void disableMacroKeyListener() {
     GlobalScreen.removeNativeKeyListener(macroKeyListener);
-  }
-
-  public MacroState getMacroState() {
-    return macroState;
   }
 }

@@ -42,7 +42,7 @@ public class MacroController {
   @GetMapping("/play")
   public ResponseEntity<String> play() {
     log.debug("Running play()");
-    macroRunnerService.playRecording();
+    macroRunnerService.togglePlayRecording();
     return ResponseEntity.ok("Playing");
   }
 

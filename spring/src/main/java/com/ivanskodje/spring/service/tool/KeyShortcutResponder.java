@@ -27,7 +27,7 @@ public class KeyShortcutResponder {
         macroRunnerService.toggleRecording();
         break;
       case KeyEvent.VK_F10:
-        macroRunnerService.playRecording();
+        macroRunnerService.togglePlayRecording();
         break;
     }
   }

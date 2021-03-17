@@ -41,6 +41,6 @@ public class KeyShortcutResponderTest extends TestKeyPressing {
 
     keyShortcutResponder.released(nativeKeyEvent);
 
-    verify(macroRunnerService, times(1)).playRecording();
+    verify(macroRunnerService, times(1)).togglePlayRecording();
   }
 }
