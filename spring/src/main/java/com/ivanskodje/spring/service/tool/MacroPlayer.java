@@ -40,6 +40,7 @@ public class MacroPlayer {
       log.debug("Playing last recording");
       globalMacroState.changeToPlaying();
 
+      // TODO: Dont do this, fix
       Runnable runnable = new Runnable() {
         @SneakyThrows
         @Override
