@@ -4,7 +4,7 @@ import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
 import com.ivanskodje.spring.service.action.MacroAction;
 import com.ivanskodje.spring.service.tool.MacroPlayer;
-import com.ivanskodje.spring.service.tool.MacroRecorder;
+import com.ivanskodje.spring.service.tool.listener.publisher.subscriber.MacroRecorderSubscriber;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -13,34 +13,34 @@ import org.springframework.stereotype.Service;
 @Service
 public class MacroRunnerService {
 
-  private final MacroRecorder macroRecorder;
+  private final MacroRecorderSubscriber macroRecorderSubscriber;
   private final MacroPlayer macroPlayer;
 
-  public MacroRunnerService(MacroRecorder macroRecorder, MacroPlayer macroPlayer)
+  public MacroRunnerService(MacroRecorderSubscriber macroRecorderSubscriber, MacroPlayer macroPlayer)
       throws NativeHookException {
     GlobalScreen.registerNativeHook();
-    this.macroRecorder = macroRecorder;
+    this.macroRecorderSubscriber = macroRecorderSubscriber;
     this.macroPlayer = macroPlayer;
   }
 
   public void toggleRecording() {
-    macroRecorder.toggle();
+    macroRecorderSubscriber.toggle();
   }
 
   public void startRecording() {
-    macroRecorder.start();
+    macroRecorderSubscriber.start();
   }
 
   public void stopRecording() {
-    macroRecorder.stop();
+    macroRecorderSubscriber.stop();
   }
 
   public void togglePlayRecording() {
-    List<MacroAction> macroActionList = macroRecorder.getMacroActionList();
+    List<MacroAction> macroActionList = macroRecorderSubscriber.getMacroActionList();
     macroPlayer.play(macroActionList);
   }
 
   public List<MacroAction> getMacroActionList() {
-    return macroRecorder.getMacroActionList();
+    return macroRecorderSubscriber.getMacroActionList();
   }
 }

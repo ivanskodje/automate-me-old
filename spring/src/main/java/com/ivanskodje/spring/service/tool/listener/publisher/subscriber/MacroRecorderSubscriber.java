@@ -1,10 +1,9 @@
-package com.ivanskodje.spring.service.tool;
+package com.ivanskodje.spring.service.tool.listener.publisher.subscriber;
 
-import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
-import com.ivanskodje.spring.aop.aspect.OnlyPressOnce;
 import com.ivanskodje.spring.service.action.MacroAction;
-import com.ivanskodje.spring.service.tool.listener.MacroKeyListener;
+import com.ivanskodje.spring.service.tool.GlobalMacroState;
+import com.ivanskodje.spring.service.tool.listener.publisher.KeyPublisher;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,10 +16,10 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class MacroRecorder {
+public class MacroRecorderSubscriber implements KeySubscriber {
 
   private final GlobalMacroState globalMacroState;
-  private final MacroKeyListener macroKeyListener;
+  private final KeyPublisher keyPublisher;
   private MacroAction previousMacroAction = null;
   @Getter
   @Setter
@@ -28,13 +27,19 @@ public class MacroRecorder {
   @Setter
   private Long startTimeInMs;
 
-  public MacroRecorder(GlobalMacroState globalMacroState) {
+  public MacroRecorderSubscriber(GlobalMacroState globalMacroState, KeyPublisher keyPublisher) {
     this.globalMacroState = globalMacroState;
-    this.macroKeyListener = new MacroKeyListener(this);
+    this.keyPublisher = keyPublisher;
   }
 
-  @OnlyPressOnce
+
+  @Override
   public void pressed(NativeKeyEvent nativeKeyEvent) {
+    recordKeyEvent(nativeKeyEvent);
+  }
+
+  @Override
+  public void released(NativeKeyEvent nativeKeyEvent) {
     recordKeyEvent(nativeKeyEvent);
   }
 
@@ -47,14 +52,9 @@ public class MacroRecorder {
     }
     MacroAction macroAction = new MacroAction(nativeKeyEvent, delayInMs, System.currentTimeMillis());
     macroActionList.add(macroAction);
-
     previousMacroAction = macroAction;
   }
 
-  @OnlyPressOnce
-  public void released(NativeKeyEvent nativeKeyEvent) {
-    recordKeyEvent(nativeKeyEvent);
-  }
 
   public void toggle() {
     switch (globalMacroState.getMacroState()) {
@@ -76,15 +76,15 @@ public class MacroRecorder {
     macroActionList.clear();
     this.startTimeInMs = System.currentTimeMillis();
     globalMacroState.changeToRecording();
-    enableMacroKeyListener();
+    startRecording();
   }
 
-  void enableMacroKeyListener() {
-    GlobalScreen.addNativeKeyListener(macroKeyListener);
+  void startRecording() {
+    keyPublisher.subscribe(this);
   }
 
   public void stop() {
-    disableMacroKeyListener();
+    stopRecording();
     previousMacroAction = null;
     globalMacroState.changeToStopped();
     removeShortcutsFromRecording();
@@ -102,7 +102,7 @@ public class MacroRecorder {
         || macroAction.getRawCode() == KeyEvent.VK_F10);
   }
 
-  void disableMacroKeyListener() {
-    GlobalScreen.removeNativeKeyListener(macroKeyListener);
+  void stopRecording() {
+    keyPublisher.unsubscribe(this);
   }
 }

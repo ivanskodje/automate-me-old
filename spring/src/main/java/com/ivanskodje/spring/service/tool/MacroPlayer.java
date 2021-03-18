@@ -34,13 +34,11 @@ public class MacroPlayer {
 
   @SneakyThrows
   public void play(List<MacroAction> macroActionList) {
-//    ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-
     if (globalMacroState.isStopped()) {
       log.debug("Playing last recording");
       globalMacroState.changeToPlaying();
 
-      // TODO: Dont do this, fix
+      // TODO: Replace the horrible bad badness of Thread.sleep, and handle the consequtive task running better.
       Runnable runnable = new Runnable() {
         @SneakyThrows
         @Override
@@ -48,15 +46,12 @@ public class MacroPlayer {
           for (MacroAction macroAction : macroActionList) {
             Thread.sleep(macroAction.getDelayInMs()); // DONT DO THIS (probably)
             if (globalMacroState.isStopped()) {
-              releaseAllPressedKeys(); // TODO: Fix, we probably have to store the nativekeyevent directly (or on the side?)
+              log.debug("Stopped playback manually");
+//              releaseAllPressedKeys(); // TODO: Fix, we probably have to store the nativekeyevent directly (or on the side?)
               return;
             }
             GlobalScreen.postNativeEvent(macroAction.getNativeKeyEvent());
           }
-
-          // Get unique list of only keys that have been pressed
-//          List<MacroAction> macroActionListKeys = macroActionList.stream().filter(distinctByKey(
-//              MacroAction::getRawCode)).collect(Collectors.toList());
 
           log.debug("Stopping playback (end)");
           globalMacroState.changeToStopped();
@@ -65,7 +60,6 @@ public class MacroPlayer {
         private void releaseAllPressedKeys() {
           for (int pressedRawCode : nativeKeyPressMaintainer.getPressedRawCodeList()) {
 
-            // int id, int modifiers, int rawCode, int keyCode, char keyChar, int keyLocation
             NativeKeyEvent nativeKeyEvent = new NativeKeyEvent(NativeKeyEvent.NATIVE_KEY_RELEASED, 0,
                 pressedRawCode, 0, ' ');
             GlobalScreen.postNativeEvent(nativeKeyEvent);
