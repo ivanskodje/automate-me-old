@@ -28,7 +28,7 @@ public class PlayingThread extends Thread {
         globalMacroState.changeToStopped();
         return;
       }
-      GlobalScreen.postNativeEvent(macroAction.getNativeKeyEvent());
+      GlobalScreen.postNativeEvent(macroAction.getNativeEvent());
     }
     log.debug("Playing finished");
     globalMacroState.changeToStopped();

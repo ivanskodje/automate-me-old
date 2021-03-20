@@ -1,7 +1,7 @@
 package com.ivanskodje.spring.service;
 
 import com.ivanskodje.spring.service.action.MacroAction;
-import com.ivanskodje.spring.service.tool.listener.publisher.subscriber.MacroRecorderSubscriber;
+import com.ivanskodje.spring.service.tool.macrorecorder.MacroRecorder;
 import com.ivanskodje.spring.service.tool.macroplayer.MacroPlayer;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -11,31 +11,31 @@ import org.springframework.stereotype.Service;
 @Service
 public class KeyboardMacroService implements MacroService {
 
-  private final MacroRecorderSubscriber macroRecorderSubscriber;
+  private final MacroRecorder macroRecorder;
   private final MacroPlayer macroPlayer;
 
-  public KeyboardMacroService(MacroRecorderSubscriber macroRecorderSubscriber, MacroPlayer macroPlayer) {
-    this.macroRecorderSubscriber = macroRecorderSubscriber;
+  public KeyboardMacroService(MacroRecorder macroRecorder, MacroPlayer macroPlayer) {
+    this.macroRecorder = macroRecorder;
     this.macroPlayer = macroPlayer;
   }
 
   @Override
   public void startRecording() {
-    macroRecorderSubscriber.start();
+    macroRecorder.startKeyboard();
   }
 
   @Override
   public void stopRecording() {
-    macroRecorderSubscriber.stop();
+    macroRecorder.stop();
   }
 
   public void toggleRecording() {
-    macroRecorderSubscriber.toggle();
+    macroRecorder.toggle();
   }
 
   @Override
   public void startPlayback() {
-    List<MacroAction> macroActionList = macroRecorderSubscriber.getMacroActionList();
+    List<MacroAction> macroActionList = macroRecorder.getMacroActionList();
     macroPlayer.startPlayback(macroActionList);
   }
 
@@ -46,11 +46,7 @@ public class KeyboardMacroService implements MacroService {
 
   @Override
   public void togglePlayback() {
-    List<MacroAction> macroActionList = macroRecorderSubscriber.getMacroActionList();
+    List<MacroAction> macroActionList = macroRecorder.getMacroActionList();
     macroPlayer.togglePlay(macroActionList);
-  }
-
-  public List<MacroAction> getMacroActionList() {
-    return macroRecorderSubscriber.getMacroActionList();
   }
 }

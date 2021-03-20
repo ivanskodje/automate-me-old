@@ -1,6 +1,6 @@
 package com.ivanskodje.spring.service.action;
 
-import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
+import com.github.kwhat.jnativehook.NativeInputEvent;
 import java.awt.event.KeyEvent;
 import lombok.Getter;
 
@@ -9,11 +9,11 @@ public class MacroAction {
 
   private final Long delayInMs;
   private final Long time;
-  private final NativeKeyEvent nativeKeyEvent;
+  private final BetterNativeKeyEvent betterNativeKeyEvent;
 
-  public MacroAction(NativeKeyEvent nativeKeyEvent, Long delay, Long startTime) {
+  public MacroAction(BetterNativeKeyEvent betterNativeKeyEvent, Long delay, Long startTime) {
     this.delayInMs = delay;
-    this.nativeKeyEvent = nativeKeyEvent;
+    this.betterNativeKeyEvent = betterNativeKeyEvent;
     this.time = startTime;
   }
 
@@ -23,11 +23,14 @@ public class MacroAction {
   }
 
   public String getKeyName() {
-    return KeyEvent.getKeyText(nativeKeyEvent.getRawCode());
+    return KeyEvent.getKeyText(betterNativeKeyEvent.getRawCode());
   }
 
   public Integer getRawCode() {
-    return nativeKeyEvent.getRawCode();
+    return betterNativeKeyEvent.getRawCode();
   }
 
+  public NativeInputEvent getNativeEvent() {
+    return betterNativeKeyEvent.getNativeEvent();
+  }
 }

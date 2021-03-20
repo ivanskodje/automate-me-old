@@ -1,6 +1,7 @@
 package com.ivanskodje.spring.service.testhelp;
 
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
+import com.ivanskodje.spring.service.action.BetterNativeKeyEvent;
 import com.ivanskodje.spring.service.action.MacroAction;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -28,8 +29,8 @@ public class TestKeyPressing {
   }
 
   public MacroAction buildMacroActionKeyPress(int keyEvent) {
-    return new MacroAction(buildNativeKeyEvent(keyEvent, NativeKeyEvent.NATIVE_KEY_PRESSED),
-        delayInMs, System.currentTimeMillis());
+    NativeKeyEvent nativeKeyEvent = buildNativeKeyEvent(keyEvent, NativeKeyEvent.NATIVE_KEY_PRESSED);
+    return new MacroAction(new BetterNativeKeyEvent(nativeKeyEvent), delayInMs, System.currentTimeMillis());
   }
 
   public NativeKeyEvent buildNativeKeyEvent(int keyEvent, int nativeKeyEventId) {
@@ -37,8 +38,8 @@ public class TestKeyPressing {
   }
 
   public MacroAction buildMacroActionKeyRelease(int keyEvent) {
-
-    return new MacroAction(buildNativeKeyEvent(keyEvent, NativeKeyEvent.NATIVE_KEY_RELEASED),
+    NativeKeyEvent nativeKeyEvent = buildNativeKeyEvent(keyEvent, NativeKeyEvent.NATIVE_KEY_RELEASED);
+    return new MacroAction(new BetterNativeKeyEvent(nativeKeyEvent),
         delayInMs, System.currentTimeMillis());
   }
 }

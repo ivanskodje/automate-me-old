@@ -1,31 +1,24 @@
-package com.ivanskodje.spring.service.tool.listener.publisher.subscriber;
+package com.ivanskodje.spring.service.tool.events;
 
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.ivanskodje.spring.service.KeyboardMacroService;
+import com.ivanskodje.spring.service.MouseMacroService;
 import java.awt.event.KeyEvent;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 
+@RequiredArgsConstructor
 @Component
-public class ShortcutSubscriber implements KeySubscriber {
+public class ShortcutEvent {
 
+  private final MouseMacroService mouseMacroService;
   private final KeyboardMacroService keyboardMacroService;
 
-  public ShortcutSubscriber(KeyboardMacroService keyboardMacroService) {
-    this.keyboardMacroService = keyboardMacroService;
-//    keyPublisher.subscribe();
-  }
-
-  @Override
-  public void pressed(NativeKeyEvent nativeKeyEvent) {
-
-  }
-
-  @Override
   public void released(NativeKeyEvent nativeKeyEvent) {
     switch (nativeKeyEvent.getRawCode()) {
       case KeyEvent.VK_F9:
-        keyboardMacroService.toggleRecording();
+        mouseMacroService.toggleRecording();
         break;
       case KeyEvent.VK_F10:
         keyboardMacroService.togglePlayback();
