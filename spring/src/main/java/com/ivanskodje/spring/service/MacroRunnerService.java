@@ -3,7 +3,7 @@ package com.ivanskodje.spring.service;
 import com.github.kwhat.jnativehook.GlobalScreen;
 import com.github.kwhat.jnativehook.NativeHookException;
 import com.ivanskodje.spring.service.action.MacroAction;
-import com.ivanskodje.spring.service.tool.MacroPlayer;
+import com.ivanskodje.spring.service.tool.macroplayer.MacroPlayer;
 import com.ivanskodje.spring.service.tool.listener.publisher.subscriber.MacroRecorderSubscriber;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +37,7 @@ public class MacroRunnerService {
 
   public void togglePlayRecording() {
     List<MacroAction> macroActionList = macroRecorderSubscriber.getMacroActionList();
-    macroPlayer.play(macroActionList);
+    macroPlayer.togglePlay(macroActionList);
   }
 
   public List<MacroAction> getMacroActionList() {

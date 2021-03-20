@@ -11,7 +11,6 @@ import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.ivanskodje.spring.service.action.MacroAction;
 import com.ivanskodje.spring.service.testhelp.TestKeyPressing;
 import com.ivanskodje.spring.service.tool.GlobalMacroState;
-import com.ivanskodje.spring.service.tool.listener.publisher.KeyPublisher;
 import java.awt.event.KeyEvent;
 import java.util.List;
 import org.junit.Before;
@@ -30,13 +29,12 @@ public class MacroRecorderUnitTest extends TestKeyPressing {
   public void before() {
     this.globalMacroState = new GlobalMacroState();
     this.spyMacroRecorderSubscriber = spy(
-        new MacroRecorderSubscriber(globalMacroState, new KeyPublisher()));
+        new MacroRecorderSubscriber(globalMacroState));
   }
 
   @Test
   public void testKeyPressing() {
-    MacroRecorderSubscriber macroRecorderSubscriber = new MacroRecorderSubscriber(new GlobalMacroState(),
-        new KeyPublisher());
+    MacroRecorderSubscriber macroRecorderSubscriber = new MacroRecorderSubscriber(new GlobalMacroState());
     macroRecorderSubscriber.setStartTimeInMs(System.currentTimeMillis());
 
     macroRecorderSubscriber.pressed(buildNativeKeyEvent(KeyEvent.VK_I, NativeKeyEvent.NATIVE_KEY_PRESSED));

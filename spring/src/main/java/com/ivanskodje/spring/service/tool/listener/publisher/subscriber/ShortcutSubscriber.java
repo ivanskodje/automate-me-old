@@ -12,10 +12,9 @@ public class ShortcutSubscriber implements KeySubscriber {
 
   private final MacroRunnerService macroRunnerService;
 
-  public ShortcutSubscriber(MacroRunnerService macroRunnerService,
-      KeyPublisher keyPublisher) {
+  public ShortcutSubscriber(MacroRunnerService macroRunnerService) {
     this.macroRunnerService = macroRunnerService;
-    keyPublisher.subscribe(this);
+//    keyPublisher.subscribe();
   }
 
   @Override

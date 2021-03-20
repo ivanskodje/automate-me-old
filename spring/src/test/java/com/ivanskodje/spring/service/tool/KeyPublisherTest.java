@@ -6,7 +6,6 @@ import static org.mockito.Mockito.verify;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.ivanskodje.spring.service.MacroRunnerService;
 import com.ivanskodje.spring.service.testhelp.TestKeyPressing;
-import com.ivanskodje.spring.service.tool.listener.publisher.KeyPublisher;
 import com.ivanskodje.spring.service.tool.listener.publisher.subscriber.ShortcutSubscriber;
 import java.awt.event.KeyEvent;
 import org.junit.Before;
@@ -25,7 +24,7 @@ public class KeyPublisherTest extends TestKeyPressing {
 
   @Before
   public void before() {
-    this.shortcutSubscriber = new ShortcutSubscriber(macroRunnerService, new KeyPublisher());
+    this.shortcutSubscriber = new ShortcutSubscriber(macroRunnerService);
   }
 
   @Test

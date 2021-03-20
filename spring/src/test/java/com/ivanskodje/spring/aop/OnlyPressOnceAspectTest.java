@@ -8,7 +8,7 @@ import com.ivanskodje.spring.aop.aspect.OnlyPressOnceAspect;
 import com.ivanskodje.spring.aop.aspect.maintainer.NativeKeyPressMaintainer;
 import com.ivanskodje.spring.service.testhelp.TestKeyPressing;
 import java.awt.event.KeyEvent;
-import java.util.List;
+import java.util.Map;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
@@ -31,9 +31,10 @@ public class OnlyPressOnceAspectTest extends TestKeyPressing {
   public void testKeyPressedOnce_expectOneResult() throws Throwable {
     pressKey(KeyEvent.VK_I);
 
-    List<Integer> rawCodeList = onlyPressOnceAspect.getNativeKeyPressedRawCodeList();
-    Assertions.assertThat(rawCodeList.get(0)).isEqualTo(KeyEvent.VK_I);
-    Assertions.assertThat(rawCodeList).hasSize(1);
+    Map<Integer, NativeKeyEvent> nativeKeyEventMap = onlyPressOnceAspect.getPressedNativeKeyEventMap();
+
+    Assertions.assertThat(nativeKeyEventMap.get(KeyEvent.VK_I).getRawCode()).isEqualTo(KeyEvent.VK_I);
+    Assertions.assertThat(nativeKeyEventMap).hasSize(1);
   }
 
   private void pressKey(int keyEvent) throws Throwable {
@@ -56,9 +57,10 @@ public class OnlyPressOnceAspectTest extends TestKeyPressing {
     pressKey(KeyEvent.VK_I);
     pressKey(KeyEvent.VK_A);
 
-    List<Integer> rawCodeList = onlyPressOnceAspect.getNativeKeyPressedRawCodeList();
-    Assertions.assertThat(rawCodeList.get(0)).isEqualTo(KeyEvent.VK_I);
-    Assertions.assertThat(rawCodeList.get(1)).isEqualTo(KeyEvent.VK_A);
-    Assertions.assertThat(rawCodeList).hasSize(2);
+    Map<Integer, NativeKeyEvent> pressedNativeKeyEventMap = onlyPressOnceAspect.getPressedNativeKeyEventMap();
+
+    Assertions.assertThat(pressedNativeKeyEventMap.get(KeyEvent.VK_I).getRawCode()).isEqualTo(KeyEvent.VK_I);
+    Assertions.assertThat(pressedNativeKeyEventMap.get(KeyEvent.VK_A).getRawCode()).isEqualTo(KeyEvent.VK_A);
+    Assertions.assertThat(pressedNativeKeyEventMap).hasSize(2);
   }
 }

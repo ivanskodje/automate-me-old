@@ -3,7 +3,6 @@ package com.ivanskodje.spring.service.tool.listener.publisher.subscriber;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.ivanskodje.spring.service.action.MacroAction;
 import com.ivanskodje.spring.service.tool.GlobalMacroState;
-import com.ivanskodje.spring.service.tool.listener.publisher.KeyPublisher;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +18,7 @@ import org.springframework.stereotype.Component;
 public class MacroRecorderSubscriber implements KeySubscriber {
 
   private final GlobalMacroState globalMacroState;
-  private final KeyPublisher keyPublisher;
+  private boolean isRunning = false;
   private MacroAction previousMacroAction = null;
   @Getter
   @Setter
@@ -27,11 +26,10 @@ public class MacroRecorderSubscriber implements KeySubscriber {
   @Setter
   private Long startTimeInMs;
 
-  public MacroRecorderSubscriber(GlobalMacroState globalMacroState, KeyPublisher keyPublisher) {
-    this.globalMacroState = globalMacroState;
-    this.keyPublisher = keyPublisher;
-  }
 
+  public MacroRecorderSubscriber(GlobalMacroState globalMacroState) {
+    this.globalMacroState = globalMacroState;
+  }
 
   @Override
   public void pressed(NativeKeyEvent nativeKeyEvent) {
@@ -54,7 +52,6 @@ public class MacroRecorderSubscriber implements KeySubscriber {
     macroActionList.add(macroAction);
     previousMacroAction = macroAction;
   }
-
 
   public void toggle() {
     switch (globalMacroState.getMacroState()) {
@@ -80,7 +77,7 @@ public class MacroRecorderSubscriber implements KeySubscriber {
   }
 
   void startRecording() {
-    keyPublisher.subscribe(this);
+    isRunning = true;
   }
 
   public void stop() {
@@ -103,6 +100,10 @@ public class MacroRecorderSubscriber implements KeySubscriber {
   }
 
   void stopRecording() {
-    keyPublisher.unsubscribe(this);
+    isRunning = false;
+  }
+
+  public boolean isRunning() {
+    return isRunning;
   }
 }

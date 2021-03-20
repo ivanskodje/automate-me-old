@@ -3,6 +3,7 @@ package com.ivanskodje.spring.service.tool;
 import com.ivanskodje.spring.aop.aspect.maintainer.NativeKeyPressMaintainer;
 import com.ivanskodje.spring.service.action.MacroAction;
 import com.ivanskodje.spring.service.testhelp.TestKeyPressing;
+import com.ivanskodje.spring.service.tool.macroplayer.MacroPlayer;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Ignore;
@@ -22,7 +23,7 @@ public class MacroPlayerTest extends TestKeyPressing {
     List<MacroAction> macroActionList = write("Hello");
     List<MacroAction> playedMacroActionList = new ArrayList<>();
 
-    macroPlayer.play(macroActionList);
+    macroPlayer.togglePlay(macroActionList);
 
 //    assertTrue(globalMacroState.isPlaying());
 

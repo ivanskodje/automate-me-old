@@ -3,7 +3,7 @@ package com.ivanskodje.spring.aop.aspect;
 import com.github.kwhat.jnativehook.NativeInputEvent;
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
 import com.ivanskodje.spring.aop.aspect.maintainer.NativeKeyPressMaintainer;
-import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -55,8 +55,8 @@ public class OnlyPressOnceAspect {
     return joinPoint.getArgs() != null && joinPoint.getArgs().length > 0;
   }
 
-  public List<Integer> getNativeKeyPressedRawCodeList() {
-    return nativeKeyPressMaintainer.getPressedRawCodeList();
+  public Map<Integer, NativeKeyEvent> getPressedNativeKeyEventMap() {
+    return nativeKeyPressMaintainer.getPressedNativeKeyEventMap();
   }
 
 }
