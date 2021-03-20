@@ -36,7 +36,10 @@ public class NativeKeyPressMaintainer {
 
   public void releasePressedKeys() {
     for (NativeKeyEvent nativeKeyEvent : pressedNativeKeyEventMap.values()) {
-      GlobalScreen.postNativeEvent(nativeKeyEvent);
+      NativeKeyEvent nativeKeyEventRelease = new NativeKeyEvent(NativeKeyEvent.NATIVE_KEY_RELEASED,
+          nativeKeyEvent.getModifiers(), nativeKeyEvent.getRawCode(), nativeKeyEvent.getKeyCode(),
+          nativeKeyEvent.getKeyChar(), nativeKeyEvent.getKeyLocation());
+      GlobalScreen.postNativeEvent(nativeKeyEventRelease);
     }
   }
 }
