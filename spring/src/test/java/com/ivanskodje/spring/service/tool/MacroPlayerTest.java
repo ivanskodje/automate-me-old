@@ -14,7 +14,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class MacroPlayerTest extends TestKeyPressing {
 
-  @Ignore // TODO: To the damn test!
+  @Ignore
   @Test
   public void testPlaying_expectPlayingStatus() {
     GlobalMacroState globalMacroState = new GlobalMacroState();

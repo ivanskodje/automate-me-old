@@ -19,20 +19,34 @@ public class MacroPlayer {
   private final NativeKeyPressMaintainer nativeKeyPressMaintainer;
   private PlayingThread playingThread;
 
-  @SneakyThrows
   public void togglePlay(List<MacroAction> macroActionList) {
+    if (globalMacroState.isStopped()) {
+      startPlayback(macroActionList);
+    } else if (globalMacroState.isPlaying()) {
+      stopPlayback();
+    } else {
+      log.debug("We cannot play/stop because we are in state {}", globalMacroState.getMacroState());
+    }
+  }
+
+  public void startPlayback(List<MacroAction> macroActionList) {
     if (globalMacroState.isStopped()) {
       log.debug("Playing last recording");
       globalMacroState.changeToPlaying();
       this.playingThread = new PlayingThread(macroActionList, globalMacroState);
       this.playingThread.start();
-    } else if (globalMacroState.isPlaying()) {
+    } else {
+      log.debug("Cannot start because we are " + globalMacroState.getMacroState());
+    }
+  }
+
+  @SneakyThrows
+  public void stopPlayback() {
+    if (globalMacroState.isPlaying()) {
       log.debug("Stop playing");
       playingThread.shutdown();
       playingThread.join();
       nativeKeyPressMaintainer.releasePressedKeys();
-    } else {
-      log.debug("We cannot play/stop because we are in state {}", globalMacroState.getMacroState());
     }
   }
 }

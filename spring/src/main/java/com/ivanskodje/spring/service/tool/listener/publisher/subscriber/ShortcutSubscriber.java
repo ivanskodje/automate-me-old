@@ -1,8 +1,7 @@
 package com.ivanskodje.spring.service.tool.listener.publisher.subscriber;
 
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
-import com.ivanskodje.spring.service.MacroRunnerService;
-import com.ivanskodje.spring.service.tool.listener.publisher.KeyPublisher;
+import com.ivanskodje.spring.service.KeyboardMacroService;
 import java.awt.event.KeyEvent;
 import org.springframework.stereotype.Component;
 
@@ -10,10 +9,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class ShortcutSubscriber implements KeySubscriber {
 
-  private final MacroRunnerService macroRunnerService;
+  private final KeyboardMacroService keyboardMacroService;
 
-  public ShortcutSubscriber(MacroRunnerService macroRunnerService) {
-    this.macroRunnerService = macroRunnerService;
+  public ShortcutSubscriber(KeyboardMacroService keyboardMacroService) {
+    this.keyboardMacroService = keyboardMacroService;
 //    keyPublisher.subscribe();
   }
 
@@ -26,10 +25,10 @@ public class ShortcutSubscriber implements KeySubscriber {
   public void released(NativeKeyEvent nativeKeyEvent) {
     switch (nativeKeyEvent.getRawCode()) {
       case KeyEvent.VK_F9:
-        macroRunnerService.toggleRecording();
+        keyboardMacroService.toggleRecording();
         break;
       case KeyEvent.VK_F10:
-        macroRunnerService.togglePlayRecording();
+        keyboardMacroService.togglePlayback();
         break;
     }
   }

@@ -4,7 +4,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
-import com.ivanskodje.spring.service.MacroRunnerService;
+import com.ivanskodje.spring.service.KeyboardMacroService;
 import com.ivanskodje.spring.service.testhelp.TestKeyPressing;
 import com.ivanskodje.spring.service.tool.listener.publisher.subscriber.ShortcutSubscriber;
 import java.awt.event.KeyEvent;
@@ -19,12 +19,12 @@ public class KeyPublisherTest extends TestKeyPressing {
 
 
   @Mock
-  private MacroRunnerService macroRunnerService;
+  private KeyboardMacroService keyboardMacroService;
   private ShortcutSubscriber shortcutSubscriber;
 
   @Before
   public void before() {
-    this.shortcutSubscriber = new ShortcutSubscriber(macroRunnerService);
+    this.shortcutSubscriber = new ShortcutSubscriber(keyboardMacroService);
   }
 
   @Test
@@ -33,7 +33,7 @@ public class KeyPublisherTest extends TestKeyPressing {
 
     shortcutSubscriber.released(nativeKeyEvent);
 
-    verify(macroRunnerService, times(1)).toggleRecording();
+    verify(keyboardMacroService, times(1)).toggleRecording();
   }
 
   @Test
@@ -42,6 +42,6 @@ public class KeyPublisherTest extends TestKeyPressing {
 
     shortcutSubscriber.released(nativeKeyEvent);
 
-    verify(macroRunnerService, times(1)).togglePlayRecording();
+    verify(keyboardMacroService, times(1)).togglePlayback();
   }
 }
