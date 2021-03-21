@@ -1,7 +1,7 @@
 package com.ivanskodje.spring.controller;
 
 import com.ivanskodje.spring.service.KeyboardMacroService;
-import com.ivanskodje.spring.service.MouseMacroService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -17,27 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class MacroController {
 
   private final KeyboardMacroService keyboardMacroService;
-  private final MouseMacroService mouseMacroService;
 
-  @GetMapping("/toggleRecording")
-  public ResponseEntity<String> toggleRecording() {
-    log.debug("Running toggleRecording()");
-    keyboardMacroService.toggleRecording();
-    return ResponseEntity.ok("Toggle");
-  }
-
-  @GetMapping("/startRecording")
-  public ResponseEntity<String> startRecording(@RequestParam(required = false) boolean mouse,
-      @RequestParam(required = false) boolean keyboard) {
+  @GetMapping("/record/start")
+  public ResponseEntity<String> startRecording(@RequestParam(required = false) List<String> input) {
     log.debug("Running startRecording()");
-    if (keyboard) {
-      log.debug("Starting Keyboard Recording");
-      keyboardMacroService.startRecording();
-    }
-    if (mouse) {
-      log.debug("Starting Mouse Recording");
-      mouseMacroService.startRecording();
-    }
+    keyboardMacroService.startRecording(input);
     return ResponseEntity.ok("Start");
   }
 

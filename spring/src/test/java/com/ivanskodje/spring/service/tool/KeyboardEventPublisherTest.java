@@ -26,7 +26,7 @@ public class KeyboardEventPublisherTest extends TestKeyPressing {
 
   @Before
   public void before() {
-    this.shortcutEvent = new ShortcutEvent(null, keyboardMacroService);
+    this.shortcutEvent = new ShortcutEvent(keyboardMacroService);
   }
 
   @Test

@@ -69,8 +69,8 @@ public class MacroRecorder {
   public void toggle() {
     switch (globalMacroState.getMacroState()) {
       case STOPPED:
-        log.debug("Starting to record");
-        startKeyboard();
+        log.debug("Starting to record (keyboard and mouse)");
+        startKeyboardAndMouse();
         break;
       case RECORDING:
         log.debug("Stopping recording");
@@ -83,14 +83,18 @@ public class MacroRecorder {
   }
 
   public void startKeyboard() {
-    macroActionList.clear();
-    this.startTimeInMs = System.currentTimeMillis();
-    globalMacroState.changeToRecording();
+    prepareForRecording();
     startKeyboardRecording();
   }
 
   void startKeyboardRecording() {
     isKeyboardEventsActive = true;
+  }
+
+  private void prepareForRecording() {
+    macroActionList.clear();
+    this.startTimeInMs = System.currentTimeMillis();
+    globalMacroState.changeToRecording();
   }
 
   public void stop() {
@@ -101,6 +105,7 @@ public class MacroRecorder {
   }
 
   private void removeShortcutsFromRecording() {
+    // TODO: Instead of going through the ENTIRE list, cut the beginning and end (that matches)
     List<MacroAction> macroActionsToDelete = macroActionList.stream()
         .filter(doesContainsAnyShortcuts())
         .collect(Collectors.toList());
@@ -142,13 +147,17 @@ public class MacroRecorder {
   }
 
   public void startMouse() {
-    macroActionList.clear();
-    this.startTimeInMs = System.currentTimeMillis();
-    globalMacroState.changeToRecording();
+    prepareForRecording();
     startMouseRecording();
   }
 
   void startMouseRecording() {
     isMouseEventsActive = true;
+  }
+
+  public void startKeyboardAndMouse() {
+    prepareForRecording();
+    startMouseRecording();
+    startKeyboardRecording();
   }
 }
