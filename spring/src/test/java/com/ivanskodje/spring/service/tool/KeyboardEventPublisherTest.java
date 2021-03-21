@@ -19,7 +19,6 @@ import org.mockito.junit.MockitoJUnitRunner;
 @RunWith(MockitoJUnitRunner.class)
 public class KeyboardEventPublisherTest extends TestKeyPressing {
 
-
   @Mock
   private KeyboardMacroService keyboardMacroService;
   private ShortcutEvent shortcutEvent;

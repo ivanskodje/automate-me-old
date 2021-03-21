@@ -25,28 +25,23 @@ public class MacroController {
     return ResponseEntity.ok("Start");
   }
 
-  @GetMapping("/stopRecording")
+
+  @GetMapping("/record/stop")
   public ResponseEntity<String> stopRecording() {
     log.debug("Running stopRecording()");
     keyboardMacroService.stopRecording();
     return ResponseEntity.ok("Stopped Recording");
   }
 
-  @GetMapping("/togglePlayback")
-  public ResponseEntity<String> togglePlayback() {
-    log.debug("Running togglePlayback()");
-    keyboardMacroService.togglePlayback();
-    return ResponseEntity.ok("Toggled Playback");
-  }
 
-  @GetMapping("/startPlayback")
-  public ResponseEntity<String> startPlayback() {
+  @GetMapping("/playback/start")
+  public ResponseEntity<String> startPlayback(@RequestParam(required = false) Integer loop) {
     log.debug("Running startPlayback()");
-    keyboardMacroService.startPlayback();
+    keyboardMacroService.startPlayback(loop);
     return ResponseEntity.ok("Playing");
   }
 
-  @GetMapping("/stopPlayback")
+  @GetMapping("/playback/stop")
   public ResponseEntity<String> stopPlayback() {
     log.debug("Running stopPlayback()");
     keyboardMacroService.stopPlayback();

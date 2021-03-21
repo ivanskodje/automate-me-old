@@ -35,9 +35,9 @@ public class KeyboardMacroService {
     macroRecorder.toggle();
   }
 
-  public void startPlayback() {
+  public void startPlayback(Integer loop) {
     List<MacroAction> macroActionList = macroRecorder.getMacroActionList();
-    macroPlayer.startPlayback(macroActionList);
+    macroPlayer.startPlayback(macroActionList, loop);
   }
 
   public void stopPlayback() {

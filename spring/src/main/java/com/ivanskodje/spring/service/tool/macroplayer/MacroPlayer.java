@@ -21,7 +21,7 @@ public class MacroPlayer {
 
   public void togglePlay(List<MacroAction> macroActionList) {
     if (globalMacroState.isStopped()) {
-      startPlayback(macroActionList);
+      startPlayback(macroActionList, -1);
     } else if (globalMacroState.isPlaying()) {
       stopPlayback();
     } else {
@@ -29,11 +29,12 @@ public class MacroPlayer {
     }
   }
 
-  public void startPlayback(List<MacroAction> macroActionList) {
+  public void startPlayback(List<MacroAction> macroActionList, Integer loop) {
     if (globalMacroState.isStopped()) {
       log.debug("Playing last recording");
       globalMacroState.changeToPlaying();
       this.playingThread = new PlayingThread(macroActionList, globalMacroState);
+      this.playingThread.setLoop(loop);
       this.playingThread.start();
     } else {
       log.debug("Cannot start because we are " + globalMacroState.getMacroState());
