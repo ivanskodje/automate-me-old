@@ -39,11 +39,6 @@ public class MacroRecorder {
     recordKeyEvent(betterNativeKeyEvent);
   }
 
-  public void pressedMouse(NativeMouseEvent nativeMouseEvent) {
-    BetterNativeKeyEvent betterNativeKeyEvent = new BetterNativeKeyEvent(nativeMouseEvent);
-    recordKeyEvent(betterNativeKeyEvent);
-  }
-
   private void recordKeyEvent(BetterNativeKeyEvent nativeKeyEvent) {
     Long delayInMs;
     if (previousMacroAction == null) {
@@ -54,6 +49,11 @@ public class MacroRecorder {
     MacroAction macroAction = new MacroAction(nativeKeyEvent, delayInMs, System.currentTimeMillis());
     macroActionList.add(macroAction);
     previousMacroAction = macroAction;
+  }
+
+  public void pressedMouse(NativeMouseEvent nativeMouseEvent) {
+    BetterNativeKeyEvent betterNativeKeyEvent = new BetterNativeKeyEvent(nativeMouseEvent);
+    recordKeyEvent(betterNativeKeyEvent);
   }
 
   public void released(NativeKeyEvent nativeKeyEvent) {
@@ -89,13 +89,6 @@ public class MacroRecorder {
     startKeyboardRecording();
   }
 
-  public void startMouse() {
-    macroActionList.clear();
-    this.startTimeInMs = System.currentTimeMillis();
-    globalMacroState.changeToRecording();
-    startMouseRecording();
-  }
-
   void startKeyboardRecording() {
     isKeyboardEventsActive = true;
   }
@@ -115,17 +108,13 @@ public class MacroRecorder {
   }
 
   private Predicate<MacroAction> doesContainsAnyShortcuts() {
-    return macroAction -> (macroAction.getRawCode() == KeyEvent.VK_F9
-        || macroAction.getRawCode() == KeyEvent.VK_F10);
+    return macroAction -> ((macroAction.getRawCode() != null) && (macroAction.getRawCode() == KeyEvent.VK_F9
+        || macroAction.getRawCode() == KeyEvent.VK_F10));
   }
 
   void stopRecording() {
     isKeyboardEventsActive = false;
     isMouseEventsActive = false;
-  }
-
-  void startMouseRecording() {
-    isMouseEventsActive = true;
   }
 
   public boolean isKeyboardEventsActive() {
@@ -150,5 +139,16 @@ public class MacroRecorder {
       default:
         log.warn("Cannot Start or Stop while we are Recording: Manually stop the recording first");
     }
+  }
+
+  public void startMouse() {
+    macroActionList.clear();
+    this.startTimeInMs = System.currentTimeMillis();
+    globalMacroState.changeToRecording();
+    startMouseRecording();
+  }
+
+  void startMouseRecording() {
+    isMouseEventsActive = true;
   }
 }

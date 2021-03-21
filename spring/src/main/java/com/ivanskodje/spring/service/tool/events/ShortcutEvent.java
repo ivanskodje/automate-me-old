@@ -21,7 +21,7 @@ public class ShortcutEvent {
         mouseMacroService.toggleRecording();
         break;
       case KeyEvent.VK_F10:
-        keyboardMacroService.togglePlayback();
+        mouseMacroService.togglePlayback();
         break;
     }
   }

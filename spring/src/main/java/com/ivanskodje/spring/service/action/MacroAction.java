@@ -23,7 +23,7 @@ public class MacroAction {
   }
 
   public String getKeyName() {
-    return KeyEvent.getKeyText(betterNativeKeyEvent.getRawCode());
+    return betterNativeKeyEvent.toString();
   }
 
   public Integer getRawCode() {

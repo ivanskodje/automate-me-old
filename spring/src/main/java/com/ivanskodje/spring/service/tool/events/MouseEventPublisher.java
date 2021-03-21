@@ -13,15 +13,20 @@ public class MouseEventPublisher {
 
   private final MacroRecorder macroRecorder;
 
-  public void pressed(NativeMouseEvent nativeEvent) {
-    if (macroRecorder.isKeyboardEventsActive()) {
-      macroRecorder.pressedMouse(nativeEvent);
+  public void pressed(NativeMouseEvent nativeMouseEvent) {
+//    log.info("Mouse Press X: {}, Y: {}, Point: {}", nativeMouseEvent.getX(), nativeMouseEvent.getY(),
+//    nativeMouseEvent.getPoint());
+
+    if (macroRecorder.isMouseEventsActive()) {
+      macroRecorder.pressedMouse(nativeMouseEvent);
     }
   }
 
-  public void released(NativeMouseEvent nativeEvent) {
-    if (macroRecorder.isKeyboardEventsActive()) {
-      macroRecorder.releasedMouse(nativeEvent);
+  public void released(NativeMouseEvent nativeMouseEvent) {
+//    log.info("Mouse Release X: {}, Y: {}, Point: {}", nativeMouseEvent.getX(), nativeMouseEvent.getY(),
+//    nativeMouseEvent.getPoint());
+    if (macroRecorder.isMouseEventsActive()) {
+      macroRecorder.releasedMouse(nativeMouseEvent);
     }
   }
 }

@@ -12,7 +12,7 @@ public class PlayingThread extends Thread {
 
   private final List<MacroAction> macroActionList;
   private final GlobalMacroState globalMacroState;
-  private boolean isRunning = true;
+  private volatile boolean isRunning = true;
 
   public PlayingThread(List<MacroAction> macroActionList, GlobalMacroState globalMacroState) {
     this.macroActionList = macroActionList;
