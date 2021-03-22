@@ -1,7 +1,7 @@
 package com.ivanskodje.spring.aop.aspect;
 
-import com.github.kwhat.jnativehook.NativeInputEvent;
-import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
+import org.jnativehook.NativeInputEvent;
+import org.jnativehook.keyboard.NativeKeyEvent;
 import com.ivanskodje.spring.aop.aspect.maintainer.NativeKeyPressMaintainer;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;

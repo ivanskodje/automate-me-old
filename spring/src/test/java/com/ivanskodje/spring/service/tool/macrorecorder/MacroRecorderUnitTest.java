@@ -7,7 +7,7 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
+import org.jnativehook.keyboard.NativeKeyEvent;
 import com.ivanskodje.spring.service.action.MacroAction;
 import com.ivanskodje.spring.service.testhelp.TestKeyPressing;
 import com.ivanskodje.spring.service.tool.GlobalMacroState;

@@ -1,7 +1,7 @@
 package com.ivanskodje.spring.service.tool.macrorecorder;
 
-import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
-import com.github.kwhat.jnativehook.mouse.NativeMouseEvent;
+import org.jnativehook.keyboard.NativeKeyEvent;
+import org.jnativehook.mouse.NativeMouseEvent;
 import com.ivanskodje.spring.service.action.BetterNativeKeyEvent;
 import com.ivanskodje.spring.service.action.MacroAction;
 import com.ivanskodje.spring.service.tool.GlobalMacroState;

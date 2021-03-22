@@ -3,7 +3,7 @@ package com.ivanskodje.spring.aop;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
+import org.jnativehook.keyboard.NativeKeyEvent;
 import com.ivanskodje.spring.aop.aspect.OnlyPressOnceAspect;
 import com.ivanskodje.spring.aop.aspect.maintainer.NativeKeyPressMaintainer;
 import com.ivanskodje.spring.service.testhelp.TestKeyPressing;

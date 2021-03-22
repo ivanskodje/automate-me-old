@@ -1,5 +1,5 @@
 logging:
   level:
-    org.jnativehook: warn
+    org.jnativehook: OFF
     com.github.kwhat: warn
     org.apache: warn

@@ -1,6 +1,6 @@
 package com.ivanskodje.spring.service.tool.events;
 
-import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
+import org.jnativehook.keyboard.NativeKeyEvent;
 import com.ivanskodje.spring.service.KeyboardMacroService;
 import java.awt.event.KeyEvent;
 import lombok.RequiredArgsConstructor;

@@ -1,8 +1,8 @@
 package com.ivanskodje.spring.service.action;
 
-import com.github.kwhat.jnativehook.NativeInputEvent;
-import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
-import com.github.kwhat.jnativehook.mouse.NativeMouseEvent;
+import org.jnativehook.NativeInputEvent;
+import org.jnativehook.keyboard.NativeKeyEvent;
+import org.jnativehook.mouse.NativeMouseEvent;
 import java.awt.event.KeyEvent;
 import lombok.Getter;
 import lombok.Setter;

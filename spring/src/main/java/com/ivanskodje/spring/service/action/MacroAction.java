@@ -1,6 +1,6 @@
 package com.ivanskodje.spring.service.action;
 
-import com.github.kwhat.jnativehook.NativeInputEvent;
+import org.jnativehook.NativeInputEvent;
 import java.awt.event.KeyEvent;
 import lombok.Getter;
 

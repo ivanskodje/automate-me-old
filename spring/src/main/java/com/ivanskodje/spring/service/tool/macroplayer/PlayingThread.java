@@ -1,6 +1,6 @@
 package com.ivanskodje.spring.service.tool.macroplayer;
 
-import com.github.kwhat.jnativehook.GlobalScreen;
+import org.jnativehook.GlobalScreen;
 import com.ivanskodje.spring.service.action.MacroAction;
 import com.ivanskodje.spring.service.tool.GlobalMacroState;
 import java.util.List;

@@ -1,6 +1,6 @@
 package com.ivanskodje.spring.service.testhelp;
 
-import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
+import org.jnativehook.keyboard.NativeKeyEvent;
 import com.ivanskodje.spring.service.action.BetterNativeKeyEvent;
 import com.ivanskodje.spring.service.action.MacroAction;
 import java.awt.event.KeyEvent;

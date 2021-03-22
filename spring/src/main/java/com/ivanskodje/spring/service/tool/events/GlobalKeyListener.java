@@ -1,11 +1,11 @@
 package com.ivanskodje.spring.service.tool.events;
 
-import com.github.kwhat.jnativehook.GlobalScreen;
-import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
-import com.github.kwhat.jnativehook.keyboard.NativeKeyListener;
-import com.github.kwhat.jnativehook.mouse.NativeMouseEvent;
-import com.github.kwhat.jnativehook.mouse.NativeMouseInputListener;
 import lombok.extern.slf4j.Slf4j;
+import org.jnativehook.GlobalScreen;
+import org.jnativehook.keyboard.NativeKeyEvent;
+import org.jnativehook.keyboard.NativeKeyListener;
+import org.jnativehook.mouse.NativeMouseEvent;
+import org.jnativehook.mouse.NativeMouseInputListener;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -25,6 +25,11 @@ public class GlobalKeyListener implements NativeKeyListener, NativeMouseInputLis
   }
 
   @Override
+  public void nativeKeyTyped(NativeKeyEvent nativeKeyEvent) {
+
+  }
+
+  @Override
   public void nativeKeyPressed(NativeKeyEvent nativeKeyEvent) {
     keyboardEventPublisher.pressed(nativeKeyEvent);
   }
@@ -32,6 +37,11 @@ public class GlobalKeyListener implements NativeKeyListener, NativeMouseInputLis
   @Override
   public void nativeKeyReleased(NativeKeyEvent nativeKeyEvent) {
     keyboardEventPublisher.released(nativeKeyEvent);
+  }
+
+  @Override
+  public void nativeMouseClicked(NativeMouseEvent nativeMouseEvent) {
+
   }
 
   @Override

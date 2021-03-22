@@ -1,7 +1,7 @@
 package com.ivanskodje.spring.aop.aspect.maintainer;
 
-import com.github.kwhat.jnativehook.GlobalScreen;
-import com.github.kwhat.jnativehook.keyboard.NativeKeyEvent;
+import org.jnativehook.GlobalScreen;
+import org.jnativehook.keyboard.NativeKeyEvent;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import lombok.Getter;
