@@ -20,7 +20,7 @@ public class MacroController {
 
   @GetMapping("/record/start")
   public ResponseEntity<String> startRecording(@RequestParam(required = false) List<String> input) {
-    log.debug("Running startRecording()");
+    log.debug("Running startRecording(), input: {}", input);
     keyboardMacroService.startRecording(input);
     return ResponseEntity.ok("Start");
   }
@@ -36,7 +36,7 @@ public class MacroController {
 
   @GetMapping("/playback/start")
   public ResponseEntity<String> startPlayback(@RequestParam(required = false) Integer loop) {
-    log.debug("Running startPlayback()");
+    log.debug("Running startPlayback(), loop: {}", loop);
     keyboardMacroService.startPlayback(loop);
     return ResponseEntity.ok("Playing");
   }

@@ -31,7 +31,7 @@ public class MacroPlayer {
 
   public void startPlayback(List<MacroAction> macroActionList, Integer loop) {
     if (globalMacroState.isStopped()) {
-      log.debug("Playing last recording");
+      log.debug("Playing recording");
       globalMacroState.changeToPlaying();
       this.playingThread = new PlayingThread(macroActionList, globalMacroState);
       this.playingThread.setLoop(loop);

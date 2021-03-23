@@ -1,6 +1,12 @@
 # Automate-Me
 
-> TODO: This project uses your system Java to run the spring web app. If you prefer to bundle JRE into the app, configure the `extraFiles` of Electron Builder to copy it when making the installer.
+# Issues To Fix
+## JNAtiveHook
+- Update the version, as the current (2.1.x) does not work properly with the Norwegian keyboard locale.
+
+## TODO
+> This project uses your system Java to run the spring web app. If you prefer to bundle JRE into the app, configure the `extraFiles` of Electron Builder to copy it when making the installer.
+
 
 ## Build Setup
 

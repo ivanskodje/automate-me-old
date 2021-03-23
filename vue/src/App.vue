@@ -1,19 +1,20 @@
 <template>
   <div id="app">
-    <HomePage />
+    <MacroPage />
   </div>
 </template>
 
 <script>
-import HomePage from './components/HomePage.vue'
+// import HomePage from './components/HomePage.vue'
+import MacroPage from './components/MacroPage.vue'
 
 export default {
   name: 'app',
   components: {
-    HomePage
+    MacroPage
   }
 }
-</script>
+</script>|
 
 <style>
 #app {
