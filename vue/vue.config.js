@@ -1,9 +1,4 @@
 module.exports = {
-  // configureWebpack: {
-  //   devServer: {
-  //       headers: { "Access-Control-Allow-Origin": "*" }
-  //   }
-  // },
   devServer: {
     port: 9000,
     proxy: {

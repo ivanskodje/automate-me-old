@@ -2,14 +2,14 @@
   <div>
     <h1>Automate Me</h1>
     <p>
-      Click buttons below to set app badge count (calling Electron via preload
-      script)
+      Press F9 to Start/Stop Recording<br />
+      Press F10 to Start/Stop Playback<br />
     </p>
     <button @click="record" :disabled="isPlaying">
-      Record
+      {{ recordText }}
     </button>
     <button @click="playback" :disabled="isRecording">
-      Play
+      {{ playText }}
     </button>
 
     <button @click="toggleKeyboard" :class="{ active: useKeyboard }">
@@ -20,7 +20,10 @@
       Mouse
     </button>
 
-    <input type="text" v-model="loop" >
+    <div>Repeat: <input type="text" v-model="loop" /></div>
+    <span>
+      Repeat -1 is infinite
+    </span>
   </div>
 </template>
 
@@ -35,33 +38,42 @@ export default {
       isPlaying: false,
       useKeyboard: true,
       useMouse: true,
-      loop: -1
+      loop: -1,
+      recordText: "Record",
+      playText: "Play",
     };
   },
-  created() {},
+  created() {
+    // TODO: Register with SockJS/STOMP here next time
+  },
 
   computed: {},
 
   methods: {
     async record() {
       if (!this.isRecording) {
-        await axios.get("/api/record/start", {
+        this.recordText = "Stop";
+        const response = await axios.get("/api/record/start", {
           params: { input: this.getKeyboard() + this.getMouse() },
         });
-      } 
-      else {
+
+        console.log(response.data);
+        this.recordText = "Record (again)";
+      } else {
         await axios.get("/api/record/stop");
+        this.recordText = "Record";
       }
       this.isRecording = !this.isRecording;
     },
     async playback() {
-     if (!this.isPlaying) {
+      if (!this.isPlaying) {
         await axios.get("/api/playback/start", {
           params: { loop: this.loop },
         });
-      } 
-      else {
+        this.playText = "Stop";
+      } else {
         await axios.get("/api/playback/stop");
+        this.playText = "Play";
       }
       this.isPlaying = !this.isPlaying;
     },
@@ -93,5 +105,10 @@ export default {
 <style scoped>
 .active {
   background-color: greenyellow;
+}
+
+span {
+  font-size: 12px;
+  color: gray;
 }
 </style>
